@@ -2,15 +2,30 @@
 <html>
 <head>
   <title>glml - webgl markup language example</title>
+  <style>
+    body { margin: 0; }
+    canvas { width: 100%; height: 100% }
+  </style>
 </head>
 <body>
   <h1>GLML example</h1>
   <p><a href="three.html">go to three.js example</a></p>
-  <gl-ml ver='100' width="1024" height="768" clearColor="#777777" camera="35">
+  <gl-ml ver='100' width="1000" height="768" clearColor="#777777" camera="35">
     <gl-box x=1 y=1 z=1 material="#00ff00" />
     <gl-light type='spot' shadow color="#FF7F00" x=-50 y=20 z=70 />
   </gl-ml>
+  <script>
+    /* IOS debug */
+    window.onerror = function handler(msg, url, line, row, err) {
+      handler.count = typeof handler.count == 'number' ? handler.count + 1 : 1
+      const count = handler.count | 0
+
+      if (count > 2) { return }
+      alert(`${msg}\n\n${url}:${line}:${row}`)
+    }
+  </script>
   <script src="js/three.min.js"></script>
+  <script src="js/CustomElements.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

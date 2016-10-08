@@ -18,7 +18,8 @@ class GLML extends HTMLElement {
   }
 
   render() {
-    for(const node of this.children) {
+    /* .children in IOS isn't supported for-of */
+    for(const node of Array.from(this.children)) {
       if (node.glAnimate) {
         node.glAnimate()
       }
@@ -48,11 +49,7 @@ class GLML extends HTMLElement {
   }
 
   _initDOM() {
-    if (!this.root) {
-      this.root = this.createShadowRoot()
-    }
-
-    this.root.appendChild(this.renderer.domElement)
+    this.appendChild(this.renderer.domElement)
   }
 
   _watchChild() {
@@ -92,7 +89,16 @@ class AbstractGLElement extends HTMLElement {
   glAnimate() { return false }
 
   attachedCallback() {
-    this.dispatchEvent(new CustomEvent('gl-init', { bubbles: true }))
+    let e
+
+    if (typeof CustomEvent == 'function') {
+      e = new CustomEvent('gl-init', { bubbles: true, cancelable: true })
+    } else {
+      e = document.createEvent('CustomEvent')
+      e.initCustomEvent('gl-init', true, true)
+    }
+    
+    this.dispatchEvent(e)
   }
 }
 
